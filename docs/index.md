@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Assembly Instructions
 ---
 
@@ -7,4 +7,4 @@ title: Assembly Instructions
 
 Available instruction sets:
 
-- [Sterling Engine Instructions](sterling-engine-instructions/instructions.html)
+- [Sterling Engine Instructions](Sterling%20Engine%20Instructions/instructions.html)
