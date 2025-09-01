@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "instructions-writer"
+version = "0.1.0"
+description = "A Python project for writing instructions"
+authors = ["Nathaniel Troutman"]
+readme = "README.md"
+packages = [{include = "instructions_writer"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+google-cloud-aiplatform = "^1.38.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
