@@ -1,0 +1,8 @@
+title: Assembly Instructions
+description: Step-by-step assembly instructions for various projects
+theme: minima
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
