@@ -64,7 +64,8 @@ Format as proper markdown with headers, numbered lists, and image references.
 """
         
         markdown = self.gemini.generate(prompt)
-        return self._fix_image_paths(markdown, structure)
+        fixed_markdown = self._fix_image_paths(markdown, structure)
+        return self._add_jekyll_front_matter(fixed_markdown, structure['title'])
     
     def _fix_image_paths(self, markdown: str, structure: Dict) -> str:
         """Fix image paths to include section folders."""
@@ -75,6 +76,16 @@ Format as proper markdown with headers, numbered lists, and image references.
                 # Replace bare filename with section/filename path
                 markdown = markdown.replace(f"({filename})", f"(<{section_folder}/{filename}>)")
         return markdown
+    
+    def _add_jekyll_front_matter(self, markdown: str, title: str) -> str:
+        """Add Jekyll front matter to the markdown content."""
+        front_matter = f"""---
+layout: default
+title: {title}
+---
+
+"""
+        return front_matter + markdown
 
 
 if __name__ == "__main__":
