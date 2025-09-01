@@ -8,7 +8,7 @@ title: Sterling Engine Instructions
 This document provides detailed assembly instructions for your Sterling Engine project. Please follow each step carefully, referencing the accompanying images to ensure correct assembly.
 
 ## 01 Crank
-g
+
 1.  **Gather Crank Components (Three-Quarters View)**
     Gather all the necessary components for the crank assembly.
     ![Gather crank components from a three-quarters view](<01 Crank/01-pieces_three-quarters.png>)
