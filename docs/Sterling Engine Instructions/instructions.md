@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: clean
 title: Sterling Engine Instructions
 ---
 

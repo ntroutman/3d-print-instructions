@@ -80,7 +80,7 @@ Format as proper markdown with headers, numbered lists, and image references.
     def _add_jekyll_front_matter(self, markdown: str, title: str) -> str:
         """Add Jekyll front matter to the markdown content."""
         front_matter = f"""---
-layout: default
+layout: clean
 title: {title}
 ---
 
