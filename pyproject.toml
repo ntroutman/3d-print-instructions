@@ -6,6 +6,9 @@ authors = ["Nathaniel Troutman"]
 readme = "README.md"
 packages = [{include = "instructions_writer"}]
 
+[tool.poetry.scripts]
+instructions-writer = "instructions_writer.main:main"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 google-cloud-aiplatform = "^1.38.0"

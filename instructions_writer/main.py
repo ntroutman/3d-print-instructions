@@ -1,6 +1,7 @@
 """Main module for generating assembly instructions from image folders."""
 
 import os
+import sys
 from pathlib import Path
 from typing import List, Dict
 from instructions_writer.gemini import GeminiClient
@@ -16,8 +17,19 @@ class InstructionGenerator:
         project_title = path.name
         
         sections = []
+        root_steps = []
+        
+        # Check for images in root directory
+        for image_file in sorted(path.iterdir()):
+            if image_file.is_file() and image_file.suffix.lower() in ['.png', '.jpg', '.jpeg']:
+                root_steps.append({
+                    'filename': image_file.name,
+                    'path': str(image_file)
+                })
+        
+        # Check for numbered section directories
         for section_dir in sorted(path.iterdir()):
-            if section_dir.is_dir():
+            if section_dir.is_dir() and section_dir.name[0].isdigit():
                 section_name = section_dir.name
                 steps = []
                 
@@ -33,12 +45,19 @@ class InstructionGenerator:
                     'steps': steps
                 })
         
+        # If no sections but root images exist, create a single section
+        if not sections and root_steps:
+            sections.append({
+                'name': 'Instructions',
+                'steps': root_steps
+            })
+        
         return {
             'title': project_title,
             'sections': sections
         }
     
-    def generate_instructions(self, folder_path: str) -> str:
+    def generate_instructions(self, folder_path: str, dry_run: bool) -> str:
         """Generate markdown instructions for the given folder."""
         structure = self.parse_folder_structure(folder_path)
         
@@ -62,7 +81,10 @@ Create detailed assembly instructions with:
 
 Format as proper markdown with headers, numbered lists, and image references.
 """
-        
+        if dry_run:
+            print(prompt)
+            sys.exit(0)
+            
         markdown = self.gemini.generate(prompt)
         fixed_markdown = self._fix_image_paths(markdown, structure)
         return self._add_jekyll_front_matter(fixed_markdown, structure['title'])
@@ -73,8 +95,12 @@ Format as proper markdown with headers, numbered lists, and image references.
             section_folder = section['name']
             for step in section['steps']:
                 filename = step['filename']
-                # Replace bare filename with section/filename path
-                markdown = markdown.replace(f"({filename})", f"(<{section_folder}/{filename}>)")
+                # For root-level images (Instructions section), don't add folder prefix
+                if section_folder == 'Instructions':
+                    markdown = markdown.replace(f"({filename})", f"(<{filename}>)")
+                else:
+                    # Replace bare filename with section/filename path
+                    markdown = markdown.replace(f"({filename})", f"(<{section_folder}/{filename}>)")
         return markdown
     
     def _add_jekyll_front_matter(self, markdown: str, title: str) -> str:
@@ -88,15 +114,28 @@ title: {title}
         return front_matter + markdown
 
 
-if __name__ == "__main__":
-    generator = InstructionGenerator()
-    folder_path = "/Users/nathaniel.troutman/Pictures/Screenshots/Sterling Engine Instructions"
-    instructions = generator.generate_instructions(folder_path)
+def main():
+    """Entry point for the CLI application."""
+    import argparse
     
-    # Write to file
-    output_file = "instructions.md"
-    with open(os.path.join(folder_path, output_file), 'w') as f:
-        f.write(instructions)
+    parser = argparse.ArgumentParser(description="Generate assembly instructions from image folders")
+    parser.add_argument("folder_path", help="Path to instruction images folder")
+    parser.add_argument("--dry-run", action="store_true", help="Print prompt without generating instructions")
+    
+    args = parser.parse_args()
+    
+    generator = InstructionGenerator()
+    instructions = generator.generate_instructions(args.folder_path, args.dry_run)
+    
+    if not args.dry_run:
+        # Write to file
+        output_file = "instructions.md"
+        with open(os.path.join(args.folder_path, output_file), 'w') as f:
+            f.write(instructions)
 
-    print(f"Instructions written to {os.path.join(folder_path, output_file)}")
-    print(instructions)
+        print(f"Instructions written to {os.path.join(args.folder_path, output_file)}")
+        print(instructions)
+
+
+if __name__ == "__main__":
+    main()
