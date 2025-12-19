@@ -1,11 +1,12 @@
 ---
-layout: clean
-title: instructions
+layout: default
+title: Reindeer Sleigh Kit Card
 ---
 
 # Assembly Instructions for instructions
 
-Welcome to the assembly instructions for your new "instructions" project! Follow these steps carefully to ensure a successful build.
+Welcome to the assembly instructions for your new "Reindeer Sleigh Kit Card" on MakerWorld project! Follow these steps 
+carefully to ensure a successful build.
 
 ---
 
