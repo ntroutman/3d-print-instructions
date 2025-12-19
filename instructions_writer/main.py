@@ -76,7 +76,7 @@ Create detailed assembly instructions with:
 1. A main title
 2. Section headers for each major assembly step
 3. Numbered steps within each section
-4. Reference the image files using markdown image syntax
+4. Reference the image file names exactly using markdown image syntax
 5. Write clear, concise instructions for each step
 
 Format as proper markdown with headers, numbered lists, and image references.
